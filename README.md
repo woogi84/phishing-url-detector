@@ -26,9 +26,14 @@ streamlit run app.py
 ```
 phishing-url-detector/
 ├── app.py              # Streamlit 메인 앱
+├── requirements.txt    # 필요 라이브러리
+├── 계획서.md            # 프로젝트 계획 문서
 ├── detector/
+│   ├── __init__.py
 │   ├── features.py     # URL 특징 추출
 │   └── scorer.py       # 위험도 점수 계산
+├── docs/
+│   └── 설계.md         # 시스템 설계 문서
 └── tests/
     └── test_features.py
 ```
