@@ -3,16 +3,22 @@ from .features import extract_features
 WEIGHTS = {
     "url_length":          {"threshold": 75, "score": 10},
     "has_ip":              {"score": 25},
-    "has_https":           {"score": -10},
+    "no_https":            {"score": 10},
     "dot_count":           {"threshold": 4,  "score": 8},
     "hyphen_count":        {"threshold": 2,  "score": 8},
     "at_symbol":           {"score": 20},
     "double_slash":        {"score": 15},
     "subdomain_count":     {"threshold": 2,  "score": 10},
-    "suspicious_keywords": {"threshold": 1,  "score": 15},
+    "suspicious_keywords": {"threshold": 2,  "score": 15},
     "is_shortened":        {"score": 12},
     "special_char_count":  {"threshold": 3,  "score": 8},
     "digit_in_domain":     {"threshold": 2,  "score": 5},
+    # v2 신규
+    "suspicious_tld":      {"score": 15},
+    "brand_in_subdomain":  {"score": 25},
+    "punycode":            {"score": 20},
+    "non_standard_port":   {"score": 15},
+    "typosquatting":       {"score": 30},
 }
 
 
@@ -24,21 +30,17 @@ def calculate_score(url: str) -> tuple[int, dict, dict]:
     for key, rule in WEIGHTS.items():
         value = features.get(key, 0)
         threshold = rule.get("threshold")
-        weight = rule["score"]
 
         if threshold is not None:
             triggered = value >= threshold
         else:
             triggered = bool(value)
 
-        if triggered:
-            total += weight
-            breakdown[key] = weight
-        else:
-            breakdown[key] = 0
+        pts = rule["score"] if triggered else 0
+        breakdown[key] = pts
+        total += pts
 
-    score = max(0, min(100, total))
-    return score, breakdown, features
+    return max(0, min(100, total)), breakdown, features
 
 
 def get_risk_level(score: int) -> tuple[str, str]:
@@ -48,4 +50,3 @@ def get_risk_level(score: int) -> tuple[str, str]:
         return "주의", "#f39c12"
     else:
         return "안전", "#27ae60"
-
