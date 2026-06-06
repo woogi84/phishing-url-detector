@@ -54,3 +54,4 @@ if st.button("분석하기", type="primary"):
 
         with st.expander("상세 특징값 보기"):
             st.json(features)
+
