@@ -3,7 +3,7 @@ from .features import extract_features
 WEIGHTS = {
     "url_length":          {"threshold": 75, "score": 10},
     "has_ip":              {"score": 25},
-    "has_https":           {"score": -10},   # 음수 = 안전 신호
+    "has_https":           {"score": -10},
     "dot_count":           {"threshold": 4,  "score": 8},
     "hyphen_count":        {"threshold": 2,  "score": 8},
     "at_symbol":           {"score": 20},
@@ -48,3 +48,4 @@ def get_risk_level(score: int) -> tuple[str, str]:
         return "주의", "#f39c12"
     else:
         return "안전", "#27ae60"
+
